@@ -1,4 +1,3 @@
-# Copyright (c) OpenMMLab. All rights reserved.
 import argparse
 
 import cv2
@@ -36,18 +35,14 @@ def main():
         ('Please specify at least one operation (save/show the '
          'video) with the argument "--out" or "--show"')
 
-    # build the model from a config file and a checkpoint file
     model = init_detector(args.config, args.checkpoint, device=args.device)
 
-    # build test pipeline
     model.cfg.test_dataloader.dataset.pipeline[
         0].type = 'mmdet.LoadImageFromNDArray'
     test_pipeline = Compose(model.cfg.test_dataloader.dataset.pipeline)
 
-    # init visualizer
     visualizer = VISUALIZERS.build(model.cfg.visualizer)
-    # the dataset_meta is loaded from the checkpoint and
-    # then pass to the model in init_detector
+
     visualizer.dataset_meta = model.dataset_meta
 
     video_reader = mmcv.VideoReader(args.video)
